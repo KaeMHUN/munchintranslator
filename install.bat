@@ -18,8 +18,6 @@ curl --output data/android --url https://raw.githubusercontent.com/KaeMHUN/munch
 curl --output data/ios --url https://raw.githubusercontent.com/KaeMHUN/munchintranslator/refs/heads/main/data/ios
 curl --output data/osx --url https://raw.githubusercontent.com/KaeMHUN/munchintranslator/refs/heads/main/data/osx
 
-
-
 if not exist "%GAME_DIR%" (
     echo HIBA: Nem talalhato a jatek konyvtara!
     echo Keresett: %GAME_DIR%
