@@ -3128,5 +3128,5 @@ marketing.pathfinder.1=Hozd el Munchkin Digital kalandjaidat a Pathfinder világ
 marketing.pathfinder.2=Tiéd a Golarion világa a Munchkin Pathfinder játékhoz, amely a Paizo's Pathfinder szerepjáték ikonikus karaktereit, osztályait és szörnyeit hozza a Munchkin Digital huncutságodba!<br>A 168 új kártyát bemutatva a Munkkin Pathfinder az elsö önálló készlet a Munchkin the Digital-on belül, még több tartalommal a Munchkin the Digital-ban!
 marketing.pathfinder.3=Lépj be az olyan ikonikus Pathfinder osztályokba, mint az Alkimista és a Boszorkány, és harcolj olyan szörnyekkel, mint a Suttogó Zsarnok, a Ghoul Friday és a Lamashtu, a Szörnyek Anyja!
 marketing.pathfinder.4=Mint minden csámcsogó, aki megéri a zsákmányát, te is szörnyeket ölsz meg és lopod el a kincseiket, hogy gyorsan megszerezd a legtöbb hatalmat – és útközben csatlakozhatsz egy frakcióhoz, hogy Saslovaggá vagy Vörössáska gyilkossá válj, és felfegyverkezhetsz a T-Csont karóval és a Sértések Páncéljával.
-marketing.pathfinder.5=Kihívások és eredmények
-marketing.pathfinder.6=10 új kihívás, köztük az új Draft Challenge!<br>18 új eredmény!<br>12 új Avatar!
+marketing.pathfinder.5=Kihívások és teljesítmények
+marketing.pathfinder.6=10 új kihívás, köztük az új Draft Challenge!<br>18 új teljesítmény!<br>12 új avatar!
