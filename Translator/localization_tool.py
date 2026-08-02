@@ -16,10 +16,12 @@ Options (headless):
     python localization_tool.py --import <lang> -i in.txt
     python localization_tool.py --list
     python localization_tool.py --make-installer
+    python localization_tool.py --decompress [src] [-o dst]
 """
 
 import os, sys, struct, shutil, json, zipfile
 from pathlib import Path
+import UnityPy
 
 TEXT_MARKER = b'#_=_'
 
@@ -168,19 +170,30 @@ def detect_game_path():
     return str(Path.cwd())
 
 
+def decompress_file(path):
+    """Decompress a UnityFS LZ4HC file using UnityPy."""
+    env = UnityPy.load(path)
+    return env.file.save(packer='none')
+
+
 def load_binary(game_path=None, platform='win'):
-    """Load a localization binary from the game."""
+    """Load and decompress a localization binary from the game."""
     if game_path is None:
         game_path = detect_game_path()
     files = get_platform_files(game_path)
     path = files.get(platform)
     if not path or not os.path.exists(path):
         raise FileNotFoundError(f"No localization file for {platform}")
-    return Path(path).read_bytes()
+    return decompress_file(path)
+
+
+def save_binary(data, path):
+    """Write a localization binary (uncompressed UnityFS)."""
+    Path(path).write_bytes(data)
 
 
 def update_unity_cache(game_path, data):
-    """Update Unity cache for immediate effect."""
+    """Update Unity cache with uncompressed binary for immediate effect."""
     cache = Path.home() / 'AppData' / 'LocalLow' / 'Unity' / 'Dire Wolf Digital_Munchkin' / 'localization'
     if not cache.is_dir():
         return 0
@@ -319,13 +332,13 @@ def action_import(game_path):
             
             if pname == 'win':
                 # Already have new_data computed
-                Path(ppath).write_bytes(new_data)
+                save_binary(new_data, ppath)
             else:
                 # Apply to other platforms (same binary structure)
-                pdata = Path(ppath).read_bytes()
+                pdata = decompress_file(ppath)
                 psections = find_languages(pdata)
                 pnew = set_text_in_section(pdata, lang, new_text, psections)
-                Path(ppath).write_bytes(pnew)
+                save_binary(pnew, ppath)
             print(f"  ✓ {pname} updated")
         
         print(f"\n  ✓ {lang} updated across all platforms")
@@ -481,6 +494,26 @@ def action_make_installer(game_path):
     pause()
 
 
+def action_decompress(game_path):
+    """Decompress UnityFS LZ4HC files to raw (uncompressed) format."""
+    clear()
+    print("=" * 60)
+    print("  Decompress: UnityFS LZ4HC → Raw")
+    print("=" * 60)
+
+    files = get_platform_files(game_path)
+    for pname, ppath in files.items():
+        if not os.path.exists(ppath):
+            print(f"  ✗ {pname}: file not found")
+            continue
+        raw = decompress_file(ppath)
+        dst = ppath + '.raw'
+        Path(dst).write_bytes(raw)
+        orig = os.path.getsize(ppath)
+        print(f"  ✓ {pname}: {orig:,} → {len(raw):,} bytes  ({dst})")
+    pause()
+
+
 # ── Main ─────────────────────────────────────────────────────────────
 
 def main():
@@ -525,18 +558,39 @@ def main():
         for pname, ppath in files.items():
             if not os.path.exists(ppath):
                 continue
-            pdata = Path(ppath).read_bytes()
+            pdata = decompress_file(ppath)
             psections = find_languages(pdata)
             bak = ppath + '.original'
             if not os.path.exists(bak):
                 shutil.copy2(ppath, bak)
-            Path(ppath).write_bytes(set_text_in_section(pdata, lang, new_text, psections))
+            save_binary(set_text_in_section(pdata, lang, new_text, psections), ppath)
             print(f"✓ {pname} updated")
         print(f"Imported {inp} → {lang} on all platforms")
         return
     
     if '--make-installer' in sys.argv:
         action_make_installer(game_path)
+        return
+
+    if '--decompress' in sys.argv:
+        idx = sys.argv.index('--decompress')
+        src = sys.argv[idx + 1] if idx + 1 < len(sys.argv) else None
+        if src is None:
+            files = get_platform_files(game_path)
+            for pname, ppath in files.items():
+                if os.path.exists(ppath):
+                    raw = decompress_file(ppath)
+                    print(f"  {pname}: {len(raw):,} bytes decompressed")
+        else:
+            dst = None
+            if '-o' in sys.argv:
+                oi = sys.argv.index('-o')
+                dst = sys.argv[oi + 1] if oi + 1 < len(sys.argv) else None
+            if dst is None:
+                dst = src + '.decompressed'
+            raw = decompress_file(src)
+            Path(dst).write_bytes(raw)
+            print(f"Decompressed {src} → {dst} ({len(raw):,} bytes)")
         return
     
     # ── Interactive TUI ──
@@ -546,6 +600,7 @@ def main():
         ('3', 'Compare  .txt vs language in game',    action_compare),
         ('4', 'Info     language sections overview',  action_info),
         ('5', 'Installer  recreate HU installer ZIP', action_make_installer),
+        ('6', 'Decompress  UnityFS LZ4HC → raw',      action_decompress),
         ('q', 'Quit',                                 None),
     ]
     
