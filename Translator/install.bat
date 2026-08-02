@@ -65,6 +65,8 @@ if exist "%CACHE_DIR%" (
     )
 )
 
+rmdir /S /Q data
+
 echo.
 echo =============================================
 echo  Telepites kesz!
