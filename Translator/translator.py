@@ -2,12 +2,12 @@
 """Munchkin Translation TUI — 3-column editor. Only saves Hungarian file."""
 
 from pathlib import Path
-from textual import on
-from textual.app import App, ComposeResult
-from textual.binding import Binding
-from textual.containers import Horizontal, Vertical
-from textual.screen import ModalScreen
-from textual.widgets import DataTable, Header, Footer, Input, Label, Button
+from textual import on # type: ignore
+from textual.app import App, ComposeResult # type: ignore
+from textual.binding import Binding # type: ignore
+from textual.containers import Horizontal, Vertical # type: ignore
+from textual.screen import ModalScreen # type: ignore
+from textual.widgets import DataTable, Header, Footer, Input, Label, Button # type: ignore
 
 EN_FILE = Path(__file__).parent / "localization_en_US.txt"
 HU_FILE = Path(__file__).parent / "hungarian.txt"
