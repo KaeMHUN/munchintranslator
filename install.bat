@@ -11,6 +11,15 @@ set "LOCAL_DIR=%GAME_DIR%\Munchkin_Data\StreamingAssets\Localization"
 set "INSTALL_DIR=%~dp0data"
 set "CACHE_DIR=%USERPROFILE%\AppData\LocalLow\Unity\Dire Wolf Digital_Munchkin\localization"
 
+rmdir /S /Q data
+mkdir data
+curl --output data/win --url https://raw.githubusercontent.com/KaeMHUN/munchintranslator/refs/heads/main/data/win
+curl --output data/android --url https://raw.githubusercontent.com/KaeMHUN/munchintranslator/refs/heads/main/data/android
+curl --output data/ios --url https://raw.githubusercontent.com/KaeMHUN/munchintranslator/refs/heads/main/data/ios
+curl --output data/osx --url https://raw.githubusercontent.com/KaeMHUN/munchintranslator/refs/heads/main/data/osx
+
+
+
 if not exist "%GAME_DIR%" (
     echo HIBA: Nem talalhato a jatek konyvtara!
     echo Keresett: %GAME_DIR%
