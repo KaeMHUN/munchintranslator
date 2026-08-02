@@ -1,10 +1,4 @@
 @echo off
-chcp 65001 >nul
-title Munchkin Digital - Magyar Nyelv Telepítő
-echo =============================================
-echo  Munchkin Digital - Magyar Nyelv Telepítő
-echo =============================================
-echo.
 
 set "GAME_DIR=%~dp0"
 set "LOCAL_DIR=%GAME_DIR%\Munchkin_Data\StreamingAssets\Localization"
