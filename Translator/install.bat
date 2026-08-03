@@ -74,5 +74,5 @@ echo.
 echo  Hasznalat: Inditsd el a jatekot, valaszd a "Francais" nyelvet.
 echo  A jatek magyarul fog megjelenni.
 echo =============================================
-pause
+start Munchkin.exe
 exit /b
